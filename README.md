@@ -11,3 +11,17 @@ The idea underneath is that the code should not only compile, instead it should 
 
 The main goals behind the curtain are that clarity always wins over performance and a rationale for a choice should always be provided.
 Some topics discussed here are general and independent from the language even if everything is tied up to Objective-C.
+
+## Authors
+
+**Luca Bernardi**
+
+- http://lucabernardi.com
+- @luka_bernardi
+- http://github.com/lukabernardi
+
+**Alberto De Bortoli**
+
+- http://albertodebortoli.com
+- @albertodebo
+- http://github.com/albertodebortoli

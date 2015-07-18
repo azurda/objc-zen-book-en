@@ -18,7 +18,7 @@ There are many ways to achieve this we are not digging into deep here, basically
 As said for all the AOP-ish libraries, the library does some cool magic with the runtime, replacing and adding methods (further tricks over the method swizzling technique).
 The API of Aspect are interesting and powerful:
 
-```objective-c
+```obj-c
 + (id<AspectToken>)aspect_hookSelector:(SEL)selector
                       withOptions:(AspectOptions)options
                        usingBlock:(id)block
@@ -31,7 +31,7 @@ The API of Aspect are interesting and powerful:
 
 For instance, the following code will perform the block parameter after the execution of the method `myMethod:` (instance or class method that be) on the class `MyClass`.
 
-```objective-c
+```obj-c
 [MyClass aspect_hookSelector:@selector(myMethod:)
                  withOptions:AspectPositionAfter
                   usingBlock:^(id<AspectInfo> aspectInfo) {
@@ -51,7 +51,7 @@ Most of them have tutorials describing how to track specific views and events in
 
 On Ray Wenderlich's blog there is a long [article](http://www.raywenderlich.com/53459/google-analytics-ios) with some sample code to include in your view controller in order to track an event with [Google Analytics](https://developers.google.com/analytics/devguides/collection/ios/):
 
-```objective-c
+```obj-c
 - (void)logButtonPress:(UIButton *)button {
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UX"
@@ -63,7 +63,7 @@ On Ray Wenderlich's blog there is a long [article](http://www.raywenderlich.com/
 
 The code above sends an event with context information whenever a button is tapped. Things get worse when you want to track a screen view:
 
-```objective-c
+```obj-c
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
@@ -89,7 +89,7 @@ This approach is clean and unobtrusive:
 
 We may want a SPOC file similar to the following (also a .plist file would perfectly fit as well):
 
-```objective-c
+```obj-c
 NSDictionary *analyticsConfiguration()
 {
     return @{
@@ -127,7 +127,7 @@ NSDictionary *analyticsConfiguration()
 
 The architecture proposed is hosted on GitHub on the [EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) profile.
 
-```objective-c
+```obj-c
 - (void)setupWithConfiguration:(NSDictionary *)configuration
 {
     // screen views tracking

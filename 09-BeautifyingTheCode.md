@@ -6,7 +6,7 @@
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
 
 **Preferred:**
-```objective-c
+```obj-c
 if (user.isHappy) {
     //Do something
 }
@@ -16,7 +16,7 @@ else {
 ```
 
 **Not Preferred:**
-```objective-c
+```obj-c
 if (user.isHappy)
 {
   //Do something
@@ -31,7 +31,7 @@ if (user.isHappy)
 
 **Preferred:**
 
-```objective-c
+```obj-c
 [UIView animateWithDuration:1.0
                  animations:^{
                      // something
@@ -44,7 +44,7 @@ if (user.isHappy)
 
 **Not Preferred:**
 
-```objective-c
+```obj-c
 [UIView animateWithDuration:1.0 animations:^{
     // something 
 } completion:^(BOOL finished) {
@@ -58,13 +58,13 @@ If auto indentation falls into bad readability, declare blocks in variables befo
 Line breaks are an important topic since this style guide is focused for print and online readability.
 
 For example:
-```objective-c
+```obj-c
 self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
 ```
 
 A long line of code like the one above should be carried on to the second line adhering to this style guide's Spacing section (two spaces).
 
-```objective-c
+```obj-c
 self.productsRequest = [[SKProductsRequest alloc] 
   initWithProductIdentifiers:productIdentifiers];
 ```

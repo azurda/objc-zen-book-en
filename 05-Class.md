@@ -16,7 +16,7 @@ In these days with ARC, it is less likely that you will need to implement the de
 
 `init` methods should be structured like this:
 
-```objective-c
+```obj-c
 - (instancetype)init
 {
     self = [super init]; // call the designated initializer
@@ -46,7 +46,7 @@ The ability to re-assign `self` can also be exploited by the `init` methods to r
 Objective-C have the concept of designated and secondary initializers. 
 The designated initializer is the initializer that takes the full complement of initialization parameters, the secondary initializers are one or more initializer methods that calls the designated initializer providing one or more default values for the initialization parameter.
 
-```objective-c
+```obj-c
 @implementation ZOCEvent
 
 - (instancetype)initWithTitle:(NSString *)title
@@ -96,7 +96,7 @@ The first case is the most trivial: you don't need to add any specific logic at 
 When you want to provide additional initialization logic you can decide to override the designated initializer. You should only override your immediate superclass's designated initializer and be sure that your implementation calls the super of the method you're overriding.  
 A typical example is whether you create a `UIViewController` subclass overriding `initWithNibName:bundle:`:
 
-```objective-c
+```obj-c
 @implementation ZOCViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -123,7 +123,7 @@ In case you want to provide your own designated initializer there are three step
 Lots of developers often miss the last two steps, this is not only a sign of little care, but in the case of the step two is clearly against the contract with the framework and can lead to very non-deterministic behaviors and bugs.
 Let's see an example of the correct way to implement this:
 
-```objective-c
+```obj-c
 @implementation ZOCNewsViewController
 
 - (id)initWithNews:(ZOCNews *)news
@@ -154,7 +154,7 @@ There are, though, cases in which not calling the class designated initializer (
 
 Here the header relative to the implementation of the previous example (note the use of macros to don't repeat the code and being less verbose).
 
-```objective-c
+```obj-c
 
 @interface ZOCNewsViewController : UIViewController
 
@@ -201,7 +201,7 @@ One often doesn't realize that Cocoa is full of conventions, and they can help t
 To have more information about the convention that allow to automatically identify the related result type please refer to the [appropriate section]((http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)) in the Clang Language Extensions guide.
 A related result type can be explicitly stated using the `instancetype` keyword as return type and this can be very helpful in situation where a factory method or convenience constructor is used. This will hint the compiler with the correct type checking and, probably more important, will behave correctly also when subclassing.
 
-```objective-c
+```obj-c
 @interface ZOCPerson
 + (instancetype)personWithName:(NSString *)name;
 @end
@@ -237,7 +237,7 @@ A better design can be achieved by creating an abstract and generic view control
 The generic view controller will check the current device idiom and depending on that it will return the appropriate subclass.
 
 
-```objective-c
+```obj-c
 @implementation ZOCKintsugiPhotoViewController
 
 - (id)initWithPhotos:(NSArray *)photos
@@ -268,7 +268,7 @@ Let's assume that we are running this code on an iPhone and that `ZOCKintsugiPho
 Generally avoid using them if possible, use dependency injection instead.
 Nevertheless, unavoidable singleton objects should use a thread-safe pattern for creating their shared instance. As of GCD, it is possible to use the `dispatch_once()` function to
 
-```objective-c
+```obj-c
 + (instancetype)sharedInstance
 {
    static id sharedInstance = nil;
@@ -282,7 +282,7 @@ Nevertheless, unavoidable singleton objects should use a thread-safe pattern for
 
 The use of dispatch_once(), which is synchronous, replaces the following, yet obsolete, idiom:
 
-```objective-c
+```obj-c
 + (instancetype)sharedInstance
 {
     static id sharedInstance;
@@ -308,12 +308,12 @@ Trying to use a Singleton as a container for objects to share across the code or
 Properties should be named as descriptively as possible, avoiding abbreviation, and camel-case with the leading word being lowercase. Luckily our tool of choice is able to autocomplete everything we type (well... almost everything. Yes, I'm looking at you Xcode's Derived Data) so there is no reason to save a couple of chars, and it's better to convey as much information as possible in your source code.
 
 **For example:**
-```objective-c
+```obj-c
 NSString *text;
 ```
 
 **Not:**
-```objective-c
+```obj-c
 NSString* text;
 NSString * text;
 ```
@@ -355,13 +355,13 @@ When using the setter/getter always prefer the dot notation.
 Dot-notation should *always* be used for accessing and mutating properties.
 
 **For example:**
-```objective-c
+```obj-c
 view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
 ```
 
 **Not:**
-```objective-c
+```obj-c
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
@@ -371,7 +371,7 @@ Using the dot notation will ensure a visual clue to help distinguish between a p
 
 The preferred way to declare a property is the following format
 
-```objective-c
+```obj-c
 @property (nonatomic, readwrite, copy) NSString *name;
 ```
 
@@ -383,7 +383,7 @@ Properties that stores a block, in order to keep it alive after the end of the d
 
 In order to achieve a public getter and a private setter, you can declare the public property as `readonly` and re-declare the same property in the the class extension as `readwrite`:
 
-```objective-c
+```obj-c
 @interface MyClass : NSObject
 @property (nonatomic, readonly) NSObject *object
 @end
@@ -395,7 +395,7 @@ In order to achieve a public getter and a private setter, you can declare the pu
 
 If the name of a `BOOL` property is expressed as an adjective, the property can omit the "is" prefix but specifies the conventional name for the get accessor, for example:
 
-```objective-c
+```obj-c
 @property (assign, getter=isEditable) BOOL editable;
 ```
 Text and example taken from the [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE).
@@ -408,7 +408,7 @@ Private properties should be declared in class extensions (anonymous categories)
 
 **For example:**
 
-```objective-c
+```obj-c
 @interface ZOCViewController ()
 @property (nonatomic, strong) UIView *bannerView;
 @end
@@ -420,7 +420,7 @@ Any property that potentially can be set with a mutable object (e.g. `NSString`,
 
 You should also avoid to expose mutable object in the public interface, because this allows clients of your class to change your own internal representation and break the encapsulation. You can provide a read-only property that returns an immutable copy of your object:
 
-```objective-c
+```obj-c
 /* .h */
 @property (nonatomic, readonly) NSArray *elements
 
@@ -436,7 +436,7 @@ There are cases when instantiating an object can be expensive and/or needs to be
 
 In this case, instead of allocating the object in the init method one could opt for overriding the property getter for lazy instantiation. Usually the template for this kind of operation is the following:
 
-```objective-c
+```obj-c
 - (NSDateFormatter *)dateFormatter {
   if (!_dateFormatter) {
     _dateFormatter = [[NSDateFormatter alloc] init];
@@ -471,7 +471,7 @@ In case you need to implement equality remember the contract: you need to implem
 
 This contracts boils down to how the lookup of those objects is done when are stored in collections (i.e. `NSDictionary` and `NSSet` use hash table data structure underneath).
 
-```objective-c
+```obj-c
 @implementation ZOCPerson
 
 - (BOOL)isEqual:(id)object {
@@ -502,7 +502,7 @@ If you can, it's always preferable to call the typed equal method in order to av
 
 A complete pattern for the isEqual* method should be as so:
 
-```objective-c
+```obj-c
 - (BOOL)isEqual:(id)object {
     if (self == object) {
       return YES;

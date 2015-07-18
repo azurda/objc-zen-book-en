@@ -19,7 +19,7 @@ A minimal step forward would be to follow the Single Responsibility Principle an
 
 The interfaces for these classes could be as so:
 
-```objective-c
+```obj-c
 
 @interface ZOCFeedParser : NSObject
 
@@ -35,7 +35,7 @@ The interfaces for these classes could be as so:
 
 ```
 
-```objective-c
+```obj-c
 
 @interface ZOCTableViewController : UITableViewController
 
@@ -47,7 +47,7 @@ The interfaces for these classes could be as so:
 
 The `ZOCFeedParser` is initialized with a `NSURL` to the endpoint to fetch the RSS feed (under the hood it will probably use NSXMLParser and NSXMLParserDelegate to create meaningful data) and the `ZOCTableViewController` is initialized with the parser. We want it to display the values retrieved by the parser and we do it using delegation with the following protocol:
 
-```objective-c
+```obj-c
 
 @protocol ZOCFeedParserDelegate <NSObject>
 @optional
@@ -62,13 +62,13 @@ The `ZOCFeedParser` is initialized with a `NSURL` to the endpoint to fetch the R
 
 It's a perfectly reasonable and suitable protocol to deal with RSS, I'd say. The view controller will conform to it in the public interface:
 
-```objective-c
+```obj-c
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
 ```
 
 and the final creation code is like so: 
 
-```objective-c
+```obj-c
 NSURL *feedURL = [NSURL URLWithString:@"http://bbc.co.uk/feed.rss"];
 
 ZOCFeedParser *feedParser = [[ZOCFeedParser alloc] initWithURL:feedURL];
@@ -83,7 +83,7 @@ The responsibility of the view controller should be to "display items provided b
 
 We modify our feed parser introducing the `ZOCFeedParserProtocol` protocol (in the ZOCFeedParserProtocol.h file where also `ZOCFeedParserDelegate` will be).
 
-```objective-c
+```obj-c
 
 @protocol ZOCFeedParserProtocol <NSObject>
 
@@ -108,7 +108,7 @@ We modify our feed parser introducing the `ZOCFeedParserProtocol` protocol (in t
 
 Notice that the delegate protocol now deals with objects conforming to our new protocol and the interface file of the ZOCFeedParser would be more skinny:
 
-```objective-c
+```obj-c
 
 @interface ZOCFeedParser : NSObject <ZOCFeedParserProtocol>
 
@@ -122,7 +122,7 @@ As `ZOCFeedParser`now conforms to `ZOCFeedParserProtocol`, it must implement all
 At this point the view controller can accept any object conforming to the new protocol, having the certaincy that the object will respond to `start` and `stop` methods and that it will provide info through the delegate property. This is all the view controller should know about the given objects and no implementation details should concern it.
 
 
-```objective-c
+```obj-c
 
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
 

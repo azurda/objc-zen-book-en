@@ -4,7 +4,7 @@ Conditional bodies should always use braces even when a conditional body could b
 
 **Preferred:**
 
-```objective-c
+```obj-c
 if (!error) {
     return success;
 }
@@ -12,14 +12,14 @@ if (!error) {
 
 **Not preferred:**
 
-```objective-c
+```obj-c
 if (!error)
     return success;
 ```
 
 or
 
-```objective-c
+```obj-c
 if (!error) return success;
 ```
 
@@ -28,7 +28,7 @@ The bug was due to a repeated `goto` statement after an `if` condition, wrapping
 
 The code extract:
 
-```objective-c
+```obj-c
 static OSStatus
 SSLVerifySignedServerKeyExchange(SSLContext *ctx, bool isRsa, SSLBuffer signedParams,
                                  uint8_t *signature, UInt16 signatureLen)
@@ -64,12 +64,12 @@ Always avoid Yoda conditions. A Yoda condition is when comparing a constant to a
 ![Yoda](./images/yoda.png)
 
 **Preferred:**
-```objective-c
+```obj-c
 if ([myValue isEqual:@42]) { ...
 ```
 
 **Not preferred:**
-```objective-c
+```obj-c
 if ([@42 isEqual:myValue]) { ...
 ```
 
@@ -77,19 +77,19 @@ if ([@42 isEqual:myValue]) { ...
 
 On a similar note of the Yoda conditions, also the nil check has been at the centre of debates. Some notous libraries out there use to check for an object to be or not to be nil as so:
 
-```objective-c
+```obj-c
 if (nil == myValue) { ...
 ```
 
 One could argue that this is amiss or similar to a Yoda condition as nil is kind of a constant. The reason why sometimes programmers use this approach to prevent error that are difficult to debug. Consider the following code:
 
-```objective-c
+```obj-c
 if (myValue == nil) { ...
 ```
 
 If a typo occurs and the programmer actually types:
 
-```objective-c
+```obj-c
 if (myValue = nil) { ...
 ```
 
@@ -98,14 +98,14 @@ it would be a valid assignment, indeed hard to debug if you are an experienced p
 More on this, to avoid all this fuss the approach that leave no space to doubt is to use the exclamation mark. Since `nil` resolves to `NO` it is unnecessary to compare it in conditions. Also, never compare something directly to `YES`, because `YES` is defined to 1 and a `BOOL` can be up to 8 bits as it is a char underneath.
 
 **Preferred:**
-```objective-c
+```obj-c
 if (someObject) { ...
 if (![someObject boolValue]) { ...
 if (!someObject) { ...
 ```
 
 **Not Preferred:**
-```objective-c
+```obj-c
 if (someObject == YES) { ... // Wrong
 if (myRawValue == YES) { ... // Never do this.
 if ([someObject boolValue] == NO) { ...
@@ -119,7 +119,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 **Preferred:**
 
-```objective-c
+```obj-c
 - (void)someMethod {
   if (![someOther boolValue]) {
       return;
@@ -131,7 +131,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 **Not preferred:**
 
-```objective-c
+```obj-c
 - (void)someMethod {
   if ([someOther boolValue]) {
     //Do something important
@@ -142,7 +142,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 When you have complex condition in the `if` clause you should always extract them and assign to a `BOOL` variable to make more clear the logic and the meaning of every single conditions.
 
-```objective-c
+```obj-c
 BOOL nameContainsSwift  = [sessionName containsString:@"Swift"];
 BOOL isCurrentYear      = [sessionDateCompontents year] == 2014;
 BOOL isSwiftSession     = nameContainsSwift && isCurrentYear;
@@ -157,24 +157,24 @@ if (isSwiftSession) {
 The Ternary operator, `?` , should only be used when it increases clarity or code neatness. A single condition is usually all that should be evaluated. Evaluating multiple conditions is usually more understandable as an if statement, or refactored into instance variables.
 
 **Preferred:**
-```objective-c
+```obj-c
 result = a > b ? x : y;
 ```
 
 **Not preferred:**
-```objective-c
+```obj-c
 result = a > b ? x = c > d ? c : d : y;
 ```
 
 When the second argument of the ternary operator (the if branch) returns the same object that was checked for existence in the condition, the following syntax is neat:
 
 **Preferred:**
-```objective-c
+```obj-c
 result = object ? : [self createObject];
 ```
 
 **Not preferred:**
-```objective-c
+```obj-c
 result = object ? object : [self createObject];
 ```
 
@@ -183,7 +183,7 @@ result = object ? object : [self createObject];
 When methods return an error parameter by reference, check the returned value, not the error variable.
 
 **Preferred:**
-```objective-c
+```obj-c
 NSError *error = nil;
 if (![self trySomethingWithError:&error]) {
     // Handle Error

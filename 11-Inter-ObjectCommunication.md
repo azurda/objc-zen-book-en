@@ -8,7 +8,7 @@ Blocks are the Objective-C version of well-knows constructs called lambdas or cl
 
 They are a great way to design asynchronous APIs as so:
 
-```objective-c
+```obj-c
 - (void)downloadObjectsAtPath:(NSString *)path
                    completion:(void(^)(NSArray *objects, NSError *error))completion;
 ```
@@ -29,7 +29,7 @@ Consider the above method, the signature of the completion block is very common:
 
 as the caller of this method is first interested in the actual data, an implementation like so is preferred:
 
-```objective-c
+```obj-c
 - (void)downloadObjectsAtPath:(NSString *)path
                    completion:(void(^)(NSArray *objects, NSError *error))completion {
     if (objects) {
@@ -79,7 +79,7 @@ It's important not to get into retain cycles when using blocks and asynchronous 
 
 **Example:**
 
-```objective-c
+```obj-c
 __weak __typeof(self) weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
     [weakSelf doSomethingWithData:data];
@@ -88,7 +88,7 @@ __weak __typeof(self) weakSelf = self;
 
 **Not:**
 
-```objective-c
+```obj-c
 [self executeBlock:^(NSData *data, NSError *error) {
     [self doSomethingWithData:data];
 }];
@@ -96,7 +96,7 @@ __weak __typeof(self) weakSelf = self;
 
 **Example with multiple statements:**
 
-```objective-c
+```obj-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
     __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -109,7 +109,7 @@ __weak __typeof(self)weakSelf = self;
 
 **Not:**
 
-```objective-c
+```obj-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
     [weakSelf doSomethingWithData:data];
@@ -119,7 +119,7 @@ __weak __typeof(self)weakSelf = self;
 
 You should add these two lines as snippets to Xcode and always use them exactly like this:
 
-```objective-c
+```obj-c
 __weak __typeof(self)weakSelf = self;
 __strong __typeof(weakSelf)strongSelf = weakSelf;
 ```
@@ -134,7 +134,7 @@ Here we dig further about the subtle things to consider about the `__weak` and t
 
 If we use directly the keyword `self` inside a block, the object is retained at block declaration time within the block (actually when the block is [copied][blocks_caveat13] but for sake of simplicity we can forget about it) . A const reference to self has its place inside the block and this affects the reference counting of the object. If the block is used by other classes and/or passed around we may want to retain self as well as all the other objects used by the block since they are *needed* for the execution of the block. 
 
-```objective-c
+```obj-c
 dispatch_block_t completionBlock = ^{
     NSLog(@"%@", self);
 }
@@ -147,7 +147,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 No big deal. But... what if the block is retained by self in a property (as the following example) and therefore the object (self) retains the block?
 
-```objective-c
+```obj-c
 self.completionHandler = ^{
     NSLog(@"%@", self);
 }
@@ -160,7 +160,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 This is what is well known as a retain cycle and retain cycles usually should be avoided. The warning we receive from CLANG is:
 
-```objective-c
+```obj-c
 Capturing 'self' strongly in this block is likely to lead to a retain cycle
 ```
 
@@ -170,7 +170,7 @@ Here comes in the `__weak` qualifier.
 
 Declaring a `__weak` reference to self outside the block and referring to it via this weak reference inside the block avoids retain cycles. This is what we usually want to do if the block is already retained by self in a property.
 
-```objective-c
+```obj-c
 __weak typeof(self) weakSelf = self;
 self.completionHandler = ^{
     NSLog(@"%@", weakSelf);
@@ -194,7 +194,7 @@ You may think, at first, this is a trick to use self inside the block avoiding t
 
 [Apple documentation][blocks_caveat1] reports that "For non-trivial cycles, however, you should use" this approach: 
 
-```objective-c
+```obj-c
 MyViewController *myController = [[MyViewController alloc] init...];
 // ...
 MyViewController * __weak weakMyController = myController;
@@ -231,7 +231,7 @@ If the block is retained by a property, a retain cycle is created between self a
 There is no retain cycle and no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, weakSelf can have been turned nil.
 The execution of the block can be preempted and different subsequent evaluations of the weakSelf pointer can lead to different values (i.e. weakSelf can become nil at a certain evaluation).
 
-```objective-c
+```obj-c
 __weak typeof(self) weakSelf = self;
 dispatch_block_t block =  ^{
     [weakSelf doSomething]; // weakSelf != nil
@@ -244,7 +244,7 @@ dispatch_block_t block =  ^{
 
 There is no retain cycle and, again, no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, `weakSelf` can have been turned nil. When the strong reference is assigned and it is not nil, we are sure that the object is retained for the entire execution of the block if preemption occurs and therefore subsequent evaluations of strongSelf will be consistent and will lead to the same value since the object is now retained. If strongSelf evaluates to nil usually the execution is returned since the block cannot execute properly.
 
-```objective-c
+```obj-c
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
     __strong typeof(self) strongSelf = weakSelf;
@@ -262,13 +262,13 @@ myObj.myBlock =  ^{
 
 In an ARC-based environment, the compiler itself alerts us with an error if trying to access an instance variable using the `->` notation. The error is very clear:
 
-```objective-c
+```obj-c
 Dereferencing a __weak pointer is not allowed due to possible null value caused by race condition, assign it to a strong variable first.
 ```
 
 It can be shown with the following code:
 
-```objective-c
+```obj-c
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
     id localVal = weakSelf->someIVar;
@@ -308,14 +308,14 @@ Unfortunately this has not been respected over years by the APIs from Apple and 
 
 While some methods have void return type and look like callbacks:
 
-```objective-c
+```obj-c
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath;
 ```
 
 others are definitely not:
 
-```objective-c
+```obj-c
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
 ```
@@ -324,7 +324,7 @@ When the delegant asks for some kind of information to the delegate object, the 
 
 One could argue that Apple has a [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html) protocol for it (forced under the name of the delegate pattern) but in reality it is used for methods providing information about how the real data should be presented.
 
-```objective-c
+```obj-c
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
 ```
@@ -338,7 +338,7 @@ To split the concepts, the following approach should be used:
 
 Here is a concrete example:
 
-```objective-c
+```obj-c
 @class ZOCSignUpViewController;
 
 @protocol ZOCSignUpViewControllerDelegate <NSObject>
@@ -362,13 +362,13 @@ Here is a concrete example:
 
 Delegate methods should be always have the caller as first parameter as in the above example otherwise delegate objects could not be able to distinguish between different instances of delegants. In other words, if the caller is not passed to the delegate object, there would be no way for any delegate to deal with 2 delegant object. So, following is close to blasphemy:
 
-```objective-c
+```obj-c
 - (void)calculatorDidCalculateValue:(CGFloat)value;
 ```
 
 By default, methods in protocols are required to be implemented by delegate objects. It is possible to mark some of them as optional and to be explicit about the required method using the `@required` and `@optional` keywords as so: 
 
-```objective-c
+```obj-c
 @protocol ZOCSignUpViewControllerDelegate <NSObject>
 @required
 - (void)signUpViewController:(ZOCSignUpViewController *)controller didProvideSignUpInfo:(NSDictionary *);
@@ -379,7 +379,7 @@ By default, methods in protocols are required to be implemented by delegate obje
 
 For optional methods, the delegant must check if the delegate actually implements a specific method before sending the message to it (otherwise a crash would occur) as so:
 
-```objective-c
+```obj-c
 if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSignUpButton:)]) {
     [self.delegate signUpViewControllerDidPressSignUpButton:self];
 }
@@ -395,7 +395,7 @@ Sometimes you may need to override delegate methods. Consider the case of having
 
 You want to provide a different implementation for the method above in `UIViewControllerB`. An implementation like the following will work:
 
-```objective-c
+```obj-c
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat retVal = 0;
@@ -411,7 +411,7 @@ But what if the given method was not implemented in the superclass (`UIViewContr
 
 The invocation
 
-```objective-c
+```obj-c
 [super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]
 ```
 
@@ -423,7 +423,7 @@ will use the NSObject's implementation that will lookup, under the hood, in the 
 
 In this case we need to ask if instances of a specific class can respond to a given selector. The following code would do the trick:
 
-```objective-c
+```obj-c
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat retVal = 0;
@@ -449,7 +449,7 @@ Multiple delegation can be achieved in many ways and the reader is dared to find
 
 A basic implementation is given here to unfold the concept. Even if in Cocoa there are ways to store weak references in a data structure to avoid retain cycles, here we use a class to hold a weak reference to the delegate object as single delegation does.
 
-```objective-c
+```obj-c
 @interface ZOCWeakObject : NSObject
 
 @property (nonatomic, weak, readonly) id object;
@@ -460,7 +460,7 @@ A basic implementation is given here to unfold the concept. Even if in Cocoa the
 @end
 ```
 
-```objective-c
+```obj-c
 @interface ZOCWeakObject ()
 @property (nonatomic, weak) id object;
 @end
@@ -508,7 +508,7 @@ A basic implementation is given here to unfold the concept. Even if in Cocoa the
 
 A simple component using weak objects to achieve multiple delegation:
 
-```objective-c
+```obj-c
 @protocol ZOCServiceDelegate <NSObject>
 @optional
 - (void)generalService:(ZOCGeneralService *)service didRetrieveEntries:(NSArray *)entries;
@@ -524,7 +524,7 @@ A simple component using weak objects to achieve multiple delegation:
 @end
 ```
 
-```objective-c
+```obj-c
 @implementation ZOCGeneralService
 - (void)registerDelegate:(id<ZOCServiceDelegate>)delegate {
     if ([delegate conformsToProtocol:@protocol(ZOCServiceDelegate)]) {

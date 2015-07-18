@@ -4,7 +4,7 @@ When you define your own `NSNotification` you should define your notification's 
 Because you're exposing this symbol in the header you should follow the usual namespace rule prefixing the notification name with the class name that belongs to.
 It's also good practice to name the notification using the verb Did/Will and terminate the name with the word "Notifications".
 
-```objective-c
+```obj-c
 // Foo.h
 extern NSString * const ZOCFooDidBecomeBarNotification
 

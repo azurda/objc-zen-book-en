@@ -3,7 +3,7 @@
 Braces are not required for case statements, unless enforced by the complier.  
 When a case contains more than one line, braces should be added.
 
-```objective-c
+```obj-c
 switch (condition) {
     case 1:
         // ...
@@ -24,7 +24,7 @@ switch (condition) {
 
 There are times when the same code can be used for multiple cases, and a fall-through should be used.  A fall-through is the removal of the 'break' statement for a case thus allowing the flow of execution to pass to the next case value.
 
-```objective-c
+```obj-c
 switch (condition) {
     case 1:
     case 2:
@@ -38,7 +38,7 @@ switch (condition) {
 
 When using an enumerated type for a switch, `default` is not needed. For example:
 
-```objective-c
+```obj-c
 switch (menuType) {
     case ZOCEnumNone:
         // ...
@@ -62,7 +62,7 @@ When using `enum`s, it is recommended to use the new fixed underlying type speci
 
 **Example:**
 
-```objective-c
+```obj-c
 typedef NS_ENUM(NSUInteger, ZOCMachineState) {
     ZOCMachineStateNone,
     ZOCMachineStateIdle,

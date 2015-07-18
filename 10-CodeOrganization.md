@@ -10,7 +10,7 @@ We could not agree more. Having you code clearly organized in a clean and define
 
 A very obscure GCC behavior that it is also supported by Clang is the ability of a code block to return the value of the latest statement if enclosing in round bracket.
 
-```objective-c
+```obj-c
 NSURL *url = ({
     NSString *urlString = [NSString stringWithFormat:@"%@/%@", baseURLString, endpoint];
     [NSURL URLWithString:urlString];
@@ -32,7 +32,7 @@ We suggest to use `#pragma mark -`to separate:
 - methods overridden from a superclass
 
 
-```objective-c
+```obj-c
 
 - (void)dealloc { /* ... */ }
 - (instancetype)init { /* ... */ }
@@ -88,7 +88,7 @@ When you use ARC, the compiler inserts memory-management calls for you. There ar
 
 If you know your code won't leak, you can suppress the warning for just this instance by wrapping it like this:
 
-```objective-c
+```obj-c
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
@@ -105,7 +105,7 @@ Suppressing warnings for unused variables
 
 It's useful to be told that a variable you've defined is going unused. In most cases, you want to remove these references to improve performance (however slightly), but sometimes you want to keep them. Why? Perhaps they have a future usage or the functionality is only temporarily removed. Either way, a smarter way to suppress the warning without brutally commenting out the relevant lines, is to use the `#pragma unused()`:
 
-```objective-c
+```obj-c
 - (void)giveMeFive
 {
     NSString *foo;
@@ -121,7 +121,7 @@ Now you can keep your code in place without the compiler complaining about it. A
 
 The compiler is a robot: it will mark what's wrong with your code using a set of rules that've been defined by Clang. But, every so often you're smarter than it. Often, you might find some offending code that you know will lead to problems but, for whatever reason, can't fix yourself at the moment. You can explicitly signal errors like this:
 
-```objective-c
+```obj-c
 - (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor
 {
     #error Whoa, buddy, you need to check for zero here!
@@ -131,7 +131,7 @@ The compiler is a robot: it will mark what's wrong with your code using a set of
 
 You can signal warnings similarly:
 
-```objective-c
+```obj-c
 - (float)divide:(float)dividend by:(float)divisor
 {
     #warning Dude, don't compare floating point numbers like this!
@@ -190,7 +190,7 @@ The documentation of class should be done using the Doxygen/AppleDoc syntax only
 
 **For example:**
 
-```objective-c
+```obj-c
 /**
  *  Designated initializer.
  *

@@ -8,12 +8,12 @@ Long, descriptive method and variable names are good.
 
 **Preferred:**
 
-```objective-c
+```obj-c
 UIButton *settingsButton;
 ```
 
 **Not Preferred:**
-```objective-c
+```obj-c
 UIButton *setBut;
 ```
 
@@ -22,33 +22,33 @@ UIButton *setBut;
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
 **Preferred:**
-```objective-c
+```obj-c
 static const NSTimeInterval ZOCSignInViewControllerFadeOutAnimationDuration = 0.4;
 ```
 
 **Not Preferred:**
-```objective-c
+```obj-c
 static const NSTimeInterval fadeOutTime = 0.4;
 ```
 
 Constants are preferred over in-line string literals or numbers, as they allow for easy reproduction of commonly used variables and can be quickly changed without the need for find and replace. Constants should be declared as `static` constants and not `#define`s unless explicitly being used as a macro.
 
 **Preferred:**
-```objective-c
+```obj-c
 static NSString * const ZOCCacheControllerDidClearCacheNotification = @"ZOCCacheControllerDidClearCacheNotification";
 static const CGFloat ZOCImageThumbnailHeight = 50.0f;
 ```
 
 **Not Preferred:**
 
-```objective-c
+```obj-c
 #define CompanyName @"Apple Inc."
 #define magicNumber 42
 ```
 
 Constants exposed externally should use this pattern in the interface file:
 
-```objective-c
+```obj-c
 extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 ```
 and the previously defined assignment should be in the implementation file.
@@ -63,7 +63,7 @@ In method signatures, there should be a space after the method type (`-`/`+` sym
 The usage of the word "and" is reserved.  It should not be used for multiple parameters as illustrated in the `initWithWidth:height:` example below.
 
 **Preferred:**
-```objective-c
+```obj-c
 - (void)setExampleText:(NSString *)text image:(UIImage *)image;
 - (void)sendAction:(SEL)aSelector to:(id)anObject forAllCells:(BOOL)flag;
 - (id)viewWithTag:(NSInteger)tag;
@@ -72,7 +72,7 @@ The usage of the word "and" is reserved.  It should not be used for multiple par
 
 **Not Preferred:**
 
-```objective-c
+```obj-c
 - (void)setT:(NSString *)text i:(UIImage *)image;
 - (void)sendAction:(SEL)aSelector :(id)anObject :(BOOL)flag;
 - (id)taggedView:(NSInteger)tag;
@@ -86,7 +86,7 @@ The usage of the word "and" is reserved.  It should not be used for multiple par
 
 **For example:**
 
-```objective-c
+```obj-c
 NSArray *names = @[@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul"];
 NSDictionary *productManagers = @{@"iPhone" : @"Kate", @"iPad" : @"Kamal", @"Mobile Web" : @"Bill"};
 NSNumber *shouldUseLiterals = @YES;
@@ -95,7 +95,7 @@ NSNumber *buildingZIPCode = @10018;
 
 **Not:**
 
-```objective-c
+```obj-c
 NSArray *names = [NSArray arrayWithObjects:@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul", nil];
 NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Kate", @"iPhone", @"Kamal", @"iPad", @"Bill", @"Mobile Web", nil];
 NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
@@ -106,7 +106,7 @@ For the mutable counterparts of these classes we recommend, instead, the use of 
 
 The following **should be avoided**:
 
-```objective-c
+```obj-c
 NSMutableArray *aMutableArray = [@[] mutableCopy];
 ```
 

@@ -11,7 +11,7 @@ A good practice is to use prefix also for category names.
 
 **Example:**
 
-```objective-c
+```obj-c
 @interface NSDate (ZOCTimeExtensions)
 - (NSString *)zoc_timeAgoShort;
 @end
@@ -19,7 +19,7 @@ A good practice is to use prefix also for category names.
 
 **Not:**
 
-```objective-c
+```obj-c
 @interface NSDate (ZOCTimeExtensions)
 - (NSString *)timeAgoShort;
 @end
@@ -28,7 +28,7 @@ A good practice is to use prefix also for category names.
 Category can be used to group related method in a header file. This is a very common practice in Apple's framework (nearby is proposed an extract from `NSDate` header) and we strongly encourage to do the same in your code. 
 In our experience creating this groups can be helpful in further refactoring: when the interface of a class starts growing can be a signal that your class is doing to much and therefore violating the Single Responsibility Principle, the previously created groups be used to better understand the different responsibilities and help in breaking down the class in more self-contained components.
 
-```objective-c
+```obj-c
 
 @interface NSDate : NSObject <NSCopying, NSSecureCoding>
 
